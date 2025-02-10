@@ -1,4 +1,4 @@
-section .text       ; Marqué en lecture et exécution (r-x) : le processeur peut l’exécuter, mais pas l’écrire/modifier.
+section .text  ; la section du code exécutable du programme.
 global _start  ; Point d'entrée principal (si exécuté seul)
 global strlen  ; Rendre strlen accessible dans la bibliothèque
 
