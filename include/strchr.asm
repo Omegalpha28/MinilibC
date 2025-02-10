@@ -19,12 +19,12 @@ strchr:
 
 .nope:                   ; le caractère n'est pas trouvé
     mov rax, 0           ; Retourner NULL (0)
-    jmp .epilogue        ; Aller à l'épilogue
+    jmp .done
 
 .yeah:                   ; Si le caractère est trouvé
-    jmp .epilogue        ; Aller à l'épilogue
+    jmp .done
 
-.epilogue:
+.done:
     pop rsi              ; Restaurer rsi
     pop rdi              ; Restaurer rdi
     pop rbx              ; Restaurer rbx
