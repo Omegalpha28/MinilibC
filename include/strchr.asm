@@ -10,12 +10,10 @@ strchr:
     mov rdx, rsi         ; Copier c dans rdx (on ne garde que le 1er octet)
 
 .loop:
-    cmp byte [rax], dl   ; Comparer le caractère actuel avec c
-    je .yeah             ; Si égal, on retourne le pointeur
-
     cmp byte [rax], 0    ; Vérifier si on atteint la fin de la chaîne
     je .nope             ; Si oui, retourner NULL
-
+    cmp byte [rax], dl   ; Comparer le caractère actuel avec c
+    je .yeah             ; Si égal, on retourne le pointeur
     inc rax              ; Passer au caractère suivant
     jmp .loop            ; Boucler
 

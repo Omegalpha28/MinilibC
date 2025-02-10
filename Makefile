@@ -1,6 +1,8 @@
 NAME = libasm.so
 SRC = 	include/strlen.asm \
-		include/strchr.asm
+		include/strchr.asm \
+		include/strrchr.asm
+
 
 OBJ = $(SRC:.asm=.o)
 LD = ld
