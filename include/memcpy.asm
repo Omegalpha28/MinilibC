@@ -2,11 +2,11 @@ section .text
 global memcpy
 
 memcpy:
-    ; Arguments (mdr pas besoin de faire des push c'est beau):
-    ; rdi = destination (dest)
-    ; rsi = source (src)
-    ; rdx = size (n)
     push rbx
+    test rdi, rdi         ; Vérifier si le pointeur destination est nul
+    jz .done              ; Si nul, retour
+    test rsi, rsi         ; Vérifier si le pointeur source est nul
+    jz .done
     mov rbx, rdi         ; rbx = dest (pointeur destination)
     mov rcx, rsi         ; rcx = src (pointeur source)
     mov rax, rdx         ; rax = n (taille)
@@ -23,5 +23,7 @@ memcpy:
 
 .done:
     pop rbx
-    mov rax, rdi         ; Retourner le pointeur de destination
+    mov rax, rdi
+    xor rdi, rdi
+    xor rsi, rsi         ; Retourner le pointeur de destination
     ret

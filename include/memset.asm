@@ -6,6 +6,10 @@ memset:
     ; rsi = value (c)
     ; rdx = size (n)
     push rbx
+    test rdi, rdi         ; Vérifier si le pointeur destination est nul
+    jz .done              ; Si nul, retour
+    test rsi, rsi         ; Vérifier si le pointeur source est nul
+    jz .done
     mov rbx, rdi         ; rbx = s (pointeur vers le buffer)
     mov al, sil          ; Charger la valeur c (sil) dans al
     mov rcx, rdx         ; rcx = n (taille)
@@ -23,4 +27,6 @@ memset:
 .done:
     xor rcx, rcx         ; rcx = 0 (NULL)
     pop rbx
+    xor rdi, rdi
+    xor rsi, rsi
     ret

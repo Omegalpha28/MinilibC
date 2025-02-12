@@ -1,27 +1,33 @@
+CC = gcc
+CFLAGS = -Wall -Wextra -Werror -ldl
+NASM = nasm
+NASMFLAGS = -f elf64 -g -O2
+LDFLAGS = -shared -o
+
 NAME = libasm.so
 SRC = 	include/strlen.asm \
-		include/strchr.asm \
-		include/strrchr.asm \
-		include/memcpy.asm \
-		include/memset.asm
-
+       include/strchr.asm \
+       include/strrchr.asm \
+       include/memcpy.asm \
+       include/memset.asm \
+       include/strcmp.asm
 
 OBJ = $(SRC:.asm=.o)
-LD = ld
-LDFLAGS = -shared -o
-NASM = nasm
-NASMFLAGS = -f elf64
 
 all: $(NAME)
-
-$(NAME): $(OBJ)
-	$(LD) $(LDFLAGS) $(NAME) $(OBJ)
+	LD_PRELOAD=./$(NAME)
 
 %.o: %.asm
 	$(NASM) $(NASMFLAGS) -o $@ $<
 
+$(NAME): $(OBJ)
+	$(CC) $(LDFLAGS) $(NAME) $(OBJ) -fPIC
+
+main: main.c
+	$(CC) $(CFLAGS) -o main main.c -ldl
+
 clean:
-	rm -f $(OBJ)
+	rm -f $(OBJ) main
 
 fclean: clean
 	rm -f $(NAME)
