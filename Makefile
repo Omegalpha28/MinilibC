@@ -1,35 +1,44 @@
-CC = gcc
-CFLAGS = -Wall -Wextra -Werror -ldl
-NASM = nasm
-NASMFLAGS = -f elf64 -g -O2
-LDFLAGS = -shared -o
+TARGET          =    libasm.so
+NASM            =    nasm
+CC              =    gcc
+TEST_OBJ 		= 	 main.c
+NASMFLAGS       =    -f elf64
+CFLAGS          =    -Wall -Wextra -Werror -g
+LDFLAGS         =    -shared -nostdlib
+TEST_EXEC       =    test_runner
 
-NAME = libasm.so
-SRC = 	include/strlen.asm \
-       include/strchr.asm \
-       include/strrchr.asm \
-       include/memcpy.asm \
-       include/memset.asm \
-       include/strcmp.asm
+SRC = include/strlen.asm \
+	include/strchr.asm \
+	include/strrchr.asm \
+	include/memcpy.asm \
+	include/memset.asm \
+	include/strcmp.asm \
+	include/strncmp.asm \
+	include/memmove.asm \
+	include/strcasecmp.asm
 
-OBJ = $(SRC:.asm=.o)
+ASM_OBJ = $(SRC:.asm=.o)
 
-all: $(NAME)
-	LD_PRELOAD=./$(NAME)
+all: $(TARGET)
 
 %.o: %.asm
 	$(NASM) $(NASMFLAGS) -o $@ $<
 
-$(NAME): $(OBJ)
-	$(CC) $(LDFLAGS) $(NAME) $(OBJ) -fPIC
+$(TARGET): $(ASM_OBJ)
+		$(CC) $(LDFLAGS) -o $(TARGET) $(ASM_OBJ)
 
-main: main.c
-	$(CC) $(CFLAGS) -o main main.c -ldl
+$(TEST_EXEC): $(TEST_OBJ) $(TARGET)
+		$(CC) $(CFLAGS) -o $(TEST_EXEC) $(TEST_OBJ) -L. -lasm
+
+run_test: $(TEST_EXEC)
+		LD_LIBRARY_PATH=. ./$(TEST_EXEC)
 
 clean:
-	rm -f $(OBJ) main
+		rm -f $(ASM_OBJ) $(TEST_OBJ)
 
 fclean: clean
-	rm -f $(NAME)
+		rm -f $(TARGET) $(TEST_EXEC)
 
 re: fclean all
+
+.PHONY: all clean fclean re run_test
