@@ -1,32 +1,16 @@
 section .text
 global memset
-
 memset:
-    ; rdi = destination (s)
-    ; rsi = value (c)
-    ; rdx = size (n)
-    push rbx
-    test rdi, rdi         ; Vérifier si le pointeur destination est nul
-    jz .done              ; Si nul, retour
-    test rsi, rsi         ; Vérifier si le pointeur source est nul
-    jz .done
-    mov rbx, rdi         ; rbx = s (pointeur vers le buffer)
-    mov al, sil          ; Charger la valeur c (sil) dans al
-    mov rcx, rdx         ; rcx = n (taille)
-    test rbx, rbx        ; Vérifier si le pointeur s est valide
-    jz .done             ; Si rbx == 0, jme casse
+    xor rcx, rcx   ; On met rcx à 0 (compteur de boucle)
+    xor rax, rax   ; On met rax à 0 (dans le cas ou ce n'est pas déja le cas (pas obligatoire imo))
 
-.loop:
-    cmp rcx, 0           ; Vérifier si n == 0
-    je .done             ; Si n == 0, finir
-    mov [rbx], al        ; Remplir l'adresse de s avec la valeur c
-    inc rbx              ; Passer à l'adresse suivante
-    dec rcx              ; Décrémenter n
-    jmp .loop            ; Répéter la boucle
+my_loop:
+    cmp rcx, rdx   ; On compare le compteur avec la taille à copier (rdx)
+    je return      ; Si rcx == rdx, on sort de la boucle, ca veut dire que c'est bien set la mémoire
+    mov byte[rdi + rcx], sil  ; On met la valeur de sil dans l'adresse mémoire (rdi + rcx)
+    inc rcx        ; On incrémente le compteur
+    jmp my_loop    ; On recommence la boucle
 
-.done:
-    xor rcx, rcx         ; rcx = 0 (NULL)
-    pop rbx
-    xor rdi, rdi
-    xor rsi, rsi
-    ret
+return:
+    mov rax, rdi ; On retourne le pointeur d'origine (comme memset en C)
+    ret          ; C'est le moment de jouer à star rail

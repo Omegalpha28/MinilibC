@@ -2,47 +2,50 @@ section .text
 global memmove
 
 memmove:
-    push rbx
-    test rdi, rdi         ; Check if the destination pointer is null
-    jz .done              ; If null, return
-    test rsi, rsi         ; Check if the source pointer is null
-    jz .done
-    mov rbx, rdi         ; rbx = dest (destination pointer)
-    mov rcx, rsi         ; rcx = src (source pointer)
-    mov rax, rdx         ; rax = n (size)
-    cmp rbx, rcx         ; Compare the destination and source addresses
-    je .done             ; If they are equal, return
-    cmp rbx, rcx         ; Compare the destination and source addresses
-    jb .forward          ; If destination < source, copy forward
-    sub rbx, rax         ; Otherwise, adjust the destination backward
-    sub rcx, rax         ; Adjust the source backward
-    jmp .copy
+    cmp rdx, 0              ; Vérifier si la taille est nulle
+    je .done                ; Si oui, on sort de la fonction
+    test rsi, rsi           ; Vérifier si la source est nulle
+    jz .done                ; Si oui, on sort de la fonction
+    test rdi, rdi           ; Vérifier si la destination est nulle
+    jz .done                ; Si oui, on sort de la fonction
+    cmp rdi, rsi            ; Vérifier si source et destination sont égales
+    je .done                ; Si oui, on sort de la fonction
+    cmp rdi, rsi            ; Si la destination est avant la source
+    ja .forward_copy        ; Copier de l'avant vers l'arrière
+    ja .reverse_copy        ; Cas où la source et la destination se chevauchent (de l'arrière vers l'avant)
 
-.forward:
-    add rbx, rax         ; Adjust the destination forward
-    add rcx, rax         ; Adjust the source forward
+.forward_copy:
+    xor rcx, rcx            ; Initialiser l'index à 0
+    jmp .update             ; Aller à l'écriture dans la pile
 
-.copy:
-    cmp rax, 0           ; Check if n == 0
-    je .done             ; If n == 0, return
-    cmp rbx, rcx         ; Compare the destination and source addresses
-    jae .copy_forward    ; If destination >= source, copy forward
-    mov dl, byte [rcx+rax-1] ; Load a byte from the source (copy backward)
-    mov [rbx+rax-1], dl  ; Copy the byte to the destination
-    dec rax              ; Decrement n
-    jmp .copy
 
-.copy_forward:
-    mov dl, byte [rcx]   ; Load a byte from the source (copy forward)
-    mov [rbx], dl        ; Copy the byte to the destination
-    inc rcx              ; Move to the next source address
-    inc rbx              ; Move to the next destination address
-    dec rax              ; Decrement n
-    jmp .copy
+
+.update:
+    cmp rcx, rdx            ; Est-ce que l'index a atteint la taille ?
+    je .read                ; Si oui, on passe à la lecture
+    movsx rbx, BYTE [rsi+rcx] ; Charger un octet de la source
+    push rbx                ; Pousser cet octet sur la pile
+    jmp .add                ; Continuer l'incrémentation
+
+.read:
+    dec rcx                 ; Décrémenter l'index
+    pop rbx                 ; Récupérer l'octet de la pile
+    mov BYTE [rdi+rcx], bl  ; Placer cet octet dans la destination
+    cmp rcx, 0              ; Est-ce qu'on a fini ?
+    je .done                ; Si oui, terminer
+    jmp .read               ; Sinon, répéter la lecture
+
+.add:
+    inc rcx                 ; Incrémenter l'index
+    jmp .update
+
+.reverse_copy:
+    lea rdi, [rdi + rdx - 1] ; Déplacer rdi à la fin de la destination
+    lea rsi, [rsi + rdx - 1] ; Déplacer rsi à la fin de la source
+    std                     ; Activer la direction inverse
+    xor rcx, rcx            ; Initialiser l'index à 0
+    jmp .update             ; Aller à l'écriture dans la pile
 
 .done:
-    pop rbx
-    mov rax, rdi
-    xor rdi, rdi
-    xor rsi, rsi         ; Return the destination pointer
-    ret
+    mov rax, rdi            ; Retourner le pointeur de destination
+    ret                     ; Adieu bisou je m'envooool!

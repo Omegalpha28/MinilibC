@@ -19,7 +19,6 @@ strpbrk:
     jz .next_s           ; Si on a fini accept, tester le prochain s[i]
     cmp al, bl           ; Comparer s[i] avec accept[j]
     je .found            ; Si égal, on a trouvé
-
     inc rdx              ; Passer au caractère suivant de accept
     jmp .loop_accept
 

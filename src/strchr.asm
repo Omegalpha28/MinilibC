@@ -1,32 +1,27 @@
 section .text
-global strchr
-
+section .text
+    global strchr
 
 strchr:
-    push rbx             ; Sauvegarder rbx
-    push rdi             ; Sauvegarder rdi (qui contient l'adresse de la chaîne)
-    push rsi             ; Sauvegarder rsi (qui contient le caractère recherché)
-    mov rax, rdi         ; Copier l'adresse de s dans rax (valeur de retour si trouvé)
-    mov rdx, rsi         ; Copier c dans rdx (on ne garde que le 1er octet)
+    test rdi, rdi         ; Vérifier si la chaîne est NULL
+    jz .not_found
+    test rsi, rsi         ; Vérifier si le caractère est NULL
+    jz .not_found
+    mov al, sil           ; Charger le caractère recherché
 
 .loop:
-    cmp byte [rax], 0    ; Vérifier si on atteint la fin de la chaîne
-    je .nope             ; Si oui, retourner NULL
-    cmp byte [rax], dl   ; Comparer le caractère actuel avec c
-    je .yeah             ; Si égal, on retourne le pointeur
-    inc rax              ; Passer au caractère suivant
-    jmp .loop            ; Boucler
+    cmp byte [rdi], 0     ; Vérifier la fin de la chaîne
+    je .not_found
+    cmp byte [rdi], al    ; Comparer avec le caractère recherché
+    je .found
+    inc rdi               ; Passer au caractère suivant
+    jmp .loop
 
-.nope:                   ; le caractère n'est pas trouvé
-    mov rax, 0           ; Retourner NULL (0)
-    jmp .done
+.not_found:
+    xor rax, rax          ; Retourner NULL (0)
+    ret
 
-.yeah:                   ; Si le caractère est trouvé
-    jmp .done
-
-.done:
-    pop rsi              ; Restaurer rsi
-    pop rdi              ; Restaurer rdi
-    pop rbx              ; Restaurer rbx
-    ret                  ; Retourner à l'appelant
+.found:
+    mov rax, rdi          ; Retourner l'adresse du caractère trouvé
+    ret
 
