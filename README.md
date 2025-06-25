@@ -1,5 +1,5 @@
 <h2 align="center">
-    <img src="https://readme-typing-svg.herokuapp.com?font=Zain&weight=900&size=40&letterSpacing=-3+px&duration=4000&pause=2000&color=093eeb&center=true&vCenter=true&width=500&lines=Welcome+Everyone+%F0%9F%91%8B;This+is+MyMarvin!;" />
+    <img src="https://readme-typing-svg.herokuapp.com?font=Zain&weight=900&size=40&letterSpacing=-3+px&duration=4000&pause=2000&color=093eeb&center=true&vCenter=true&width=500&lines=Welcome+Everyone+%F0%9F%91%8B;This+is+my+own+C+library+in+Haskell!;" />
 </h2>
 
 <h2>Repository info ℹ️</h2>
@@ -22,5 +22,5 @@
 </div>
 <h2>Resume 💬</h2>
 <div>
-    For the MY_MARVIN project, We had to learn how to automate developer tasks using Jenkins, a popular open-source automation tool. We built a complete CI/CD pipeline by configuring everything through code using YAML and Groovy scripts. The goal was to create a fully automated Jenkins setup with specific users, roles, jobs, and permissions, all while respecting strict rules and using only allowed plugins. We worked with tools like Jenkins Configuration as Code (JCasC) and Job DSL to define the whole system. In the end, my setup had to be able to manage builds, test projects, and follow DevOps principles.
+For the MINILIBC project, I had to create my own version of a dynamic C standard library using x86-64 Assembly. I reimplemented key functions like strlen, memcpy, and strcmp entirely in assembly, and compiled everything into a shared library called libasm.so. The goal was to preload this custom library with LD_PRELOAD to override the default system functions. All the code was assembled with nasm and linked using ld, and I had to follow the exact behavior described in the man pages. It was a deep dive into low-level programming and how the C library works under the hood.
 </div>
