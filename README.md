@@ -4,7 +4,7 @@
 
 <h2>Repository info ℹ️</h2>
 <div>
-<img src="https://api.visitorbadge.io/api/VisitorHit?user=Omegalpha28&repo=MinilibC-badge&countColor=%237B1E7A" />
+<a href="https://visitorbadge.io/status?path=https%3A%2F%2Fgithub.com%2FOmegalpha28%2FMinilibC"><img src="https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2FOmegalpha28%2FMinilibC&labelColor=%23697689&countColor=%232ccce4&labelStyle=upper" height="30px"/></a>
 <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/Omegalpha28/MinilibC?color=082DEA&logo=github&style=for-the-badge&logoColor=181717" height="30px">
 <img alt="Last commit" src="https://img.shields.io/github/last-commit/Omegalpha28/MinilibC?color=082DEA&logo=git&logoColor&style=for-the-badge" height="30px">
 <img alt="GitHub forks" src="https://img.shields.io/github/forks/Omegalpha28/MinilibC?color=082DEA&logo=github&style=for-the-badge&logoColor=181717" height="30px">
